@@ -1,17 +1,33 @@
 package com.github.RamezCh;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
+    private static final int ALPHABET_SIZE = 26;
+    
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        String originalText = "I can encrypt and decrypt";
+        int key = 11;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        String encoded = encode(originalText, key);
+        System.out.println("Encoded: " + encoded);
+
+        String decoded = decode(encoded, key);
+        System.out.println("Decoded: " + decoded);
+    }
+
+    public static String encode(String text, int key) {
+        key = ((key % ALPHABET_SIZE) + ALPHABET_SIZE) % ALPHABET_SIZE;
+        StringBuilder encodedSentence = new StringBuilder();
+        for(char letter : text.toCharArray()) {
+            if(Character.isLetter(letter)) {
+                char base = Character.isUpperCase(letter) ? 'A' : 'a';
+                letter = (char) ( (letter - base + key) % ALPHABET_SIZE + base);
+            }
+            encodedSentence.append(letter);
         }
+        return encodedSentence.toString();
+    }
+
+    public static String decode(String text, int key) {
+        return encode(text, (ALPHABET_SIZE - (key % ALPHABET_SIZE)));
     }
 }
